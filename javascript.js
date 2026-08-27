@@ -1,36 +1,95 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ================= MOBILE MENU ================= */
+
+    const menuToggle = document.getElementById("menuToggle");
+    const navbar = document.getElementById("navbar");
+
+    if (menuToggle && navbar) {
+
+        menuToggle.addEventListener("click", () => {
+            navbar.classList.toggle("active");
+        });
+
+
+        navbar.querySelectorAll("a").forEach(link => {
+
+            link.addEventListener("click", () => {
+                navbar.classList.remove("active");
+            });
+
+        });
+
+    }
+
+
+    /* ================= PROJECT FILTER ================= */
+
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    const projectCards = document.querySelectorAll(".project-card");
+
 
     filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            
-            // Hapus kelas 'active' dari semua tombol dan tambahkan ke tombol yang diklik
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
 
-            const filterValue = button.getAttribute('data-filter');
+        button.addEventListener("click", () => {
 
-            // Iterasi melalui setiap kartu proyek
-            projectCards.forEach(card => {
-                const cardCategory = card.getAttribute('data-category');
+            /* Active button */
 
-                if (filterValue === 'all' || filterValue === cardCategory) {
-                    // Tampilkan kartu
-                    card.classList.remove('hidden');
-                    // Menggunakan timeout untuk transisi opacity (opsional tapi bagus)
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                    }, 10); 
-                } else {
-                    // Sembunyikan kartu dengan transisi
-                    card.style.opacity = '0';
-                    // Sembunyikan elemen setelah transisi opacity selesai
-                    setTimeout(() => {
-                        card.classList.add('hidden');
-                    }, 300); // Sesuaikan dengan durasi transisi CSS
-                }
+            filterButtons.forEach(btn => {
+                btn.classList.remove("active");
             });
+
+            button.classList.add("active");
+
+
+            const filterValue =
+                button.getAttribute("data-filter");
+
+
+            projectCards.forEach(card => {
+
+                const categories =
+                    card.getAttribute("data-category");
+
+
+                if (
+                    filterValue === "all" ||
+                    categories.includes(filterValue)
+                ) {
+
+                    card.classList.remove("hidden");
+
+                } else {
+
+                    card.classList.add("hidden");
+
+                }
+
+            });
+
         });
+
     });
+
+
+    /* ================= SCROLL HEADER ================= */
+
+    const header = document.querySelector(".header");
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 50) {
+
+            header.style.background =
+                "rgba(11,15,25,0.96)";
+
+        } else {
+
+            header.style.background =
+                "rgba(11,15,25,0.88)";
+
+        }
+
+    });
+
 });
