@@ -1,21 +1,39 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
 
-    /* ================= MOBILE MENU ================= */
+    /* =========================================
+       MOBILE NAVIGATION
+    ========================================= */
 
     const menuToggle = document.getElementById("menuToggle");
     const navbar = document.getElementById("navbar");
 
     if (menuToggle && navbar) {
 
-        menuToggle.addEventListener("click", () => {
-            navbar.classList.toggle("active");
+        menuToggle.addEventListener("click", function () {
+
+            const isOpen = navbar.classList.toggle("active");
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                isOpen
+            );
+
         });
 
 
-        navbar.querySelectorAll("a").forEach(link => {
+        const navLinks = navbar.querySelectorAll("a");
 
-            link.addEventListener("click", () => {
+        navLinks.forEach(function (link) {
+
+            link.addEventListener("click", function () {
+
                 navbar.classList.remove("active");
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
             });
 
         });
@@ -23,38 +41,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* ================= PROJECT FILTER ================= */
+    /* =========================================
+       PROJECT FILTER
+    ========================================= */
 
-    const filterButtons = document.querySelectorAll(".filter-btn");
-    const projectCards = document.querySelectorAll(".project-card");
+    const filterButtons =
+        document.querySelectorAll(".filter-btn");
+
+    const projectCards =
+        document.querySelectorAll(".project-card");
 
 
-    filterButtons.forEach(button => {
+    filterButtons.forEach(function (button) {
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click", function () {
+
+            const selectedFilter =
+                button.getAttribute("data-filter");
+
 
             /* Active button */
 
-            filterButtons.forEach(btn => {
+            filterButtons.forEach(function (btn) {
+
                 btn.classList.remove("active");
+
             });
+
 
             button.classList.add("active");
 
 
-            const filterValue =
-                button.getAttribute("data-filter");
+            /* Filter project */
 
-
-            projectCards.forEach(card => {
+            projectCards.forEach(function (card) {
 
                 const categories =
                     card.getAttribute("data-category");
 
 
                 if (
-                    filterValue === "all" ||
-                    categories.includes(filterValue)
+                    selectedFilter === "all" ||
+                    categories.includes(selectedFilter)
                 ) {
 
                     card.classList.remove("hidden");
@@ -72,24 +100,83 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* ================= SCROLL HEADER ================= */
+    /* =========================================
+       HEADER SCROLL EFFECT
+    ========================================= */
 
-    const header = document.querySelector(".header");
+    const header =
+        document.querySelector(".header");
 
-    window.addEventListener("scroll", () => {
 
-        if (window.scrollY > 50) {
+    window.addEventListener("scroll", function () {
+
+        if (window.scrollY > 30) {
 
             header.style.background =
-                "rgba(11,15,25,0.96)";
+                "rgba(9, 13, 22, 0.96)";
 
         } else {
 
             header.style.background =
-                "rgba(11,15,25,0.88)";
+                "rgba(9, 13, 22, 0.88)";
 
         }
 
     });
+
+
+    /* =========================================
+       SCROLL REVEAL
+    ========================================= */
+
+    const revealElements =
+        document.querySelectorAll(
+            ".section-heading, " +
+            ".about-card, " +
+            ".project-card, " +
+            ".timeline-item, " +
+            ".skill-card, " +
+            ".education-card"
+        );
+
+
+    const observer =
+        new IntersectionObserver(
+
+            function (entries) {
+
+                entries.forEach(function (entry) {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add(
+                            "show"
+                        );
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                });
+
+            },
+
+            {
+                threshold: 0.08
+            }
+
+        );
+
+
+    revealElements.forEach(function (element) {
+
+        element.classList.add("reveal");
+
+        observer.observe(element);
+
+    });
+
 
 });
